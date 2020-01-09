@@ -21,6 +21,9 @@ The "Developer Mode" need to be enabled to discover and operate the device.
 
 ### package yeelight
 
+``` go
+
+```
 
 ## Feature and bugs
 
@@ -32,6 +35,6 @@ More info about Yeelight API:
 * [Yeelight Developer](https://www.yeelight.com/en_US/developer)
 * [Yeelight Inter-Operation Specification](doc/Yeelight_Inter-Operation_Spec.pdf)
 
-Yeelight API heavily based from:
+Yeelight API heavily based on:
 * https://github.com/nunows/goyeelight
 * https://github.com/edgard/yeelight

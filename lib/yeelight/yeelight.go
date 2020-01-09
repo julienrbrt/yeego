@@ -26,7 +26,7 @@ var (
 
 //Yeelight are the light properties
 type Yeelight struct {
-	Location   string   `json:"location,omitempty"`
+	Location   string   `json:"location"`
 	ID         string   `json:"id,omitempty"`
 	Model      string   `json:"model,omitempty"`
 	FWVersion  int      `json:"fw_ver,omitempty"`
@@ -38,7 +38,7 @@ type Yeelight struct {
 	RGB        int      `json:"rgb,omitempty"`
 	Hue        int      `json:"hue,omitempty"`
 	Saturation int      `json:"sat,omitempty"`
-	Name       string   `json:"name,omitempty"`
+	Name       string   `json:"name"`
 }
 
 //Command to send to the light
@@ -63,7 +63,7 @@ type Error struct {
 
 //Discover uses SSDP to find and return the IP address of the lights
 //credit: https://github.com/edgard/yeelight/blob/master/yeelight.go
-func Discover() ([]Yeelight, error) {
+func Discover(timeout time.Duration) ([]Yeelight, error) {
 	laddr, err := net.ResolveUDPAddr("udp4", ":0")
 	if err != nil {
 		return nil, err
@@ -161,7 +161,7 @@ func (y *Yeelight) GetProp(values ...string) error {
 	cmd := Command{
 		ID:     1,
 		Method: "get_prop",
-		Params: []interface{}{"power", "bright", "ct", "rgb", "hue", "sat", "color_mode"},
+		Params: []interface{}{"power", "bright", "ct", "rgb", "hue", "sat", "color_mode", "name"},
 	}
 
 	resp, err := y.request(cmd)
@@ -176,6 +176,7 @@ func (y *Yeelight) GetProp(values ...string) error {
 	y.Hue, _ = strconv.Atoi(resp.Result.([]interface{})[4].(string))
 	y.Saturation, _ = strconv.Atoi(resp.Result.([]interface{})[5].(string))
 	y.ColorMode, _ = strconv.Atoi(resp.Result.([]interface{})[6].(string))
+	y.Name, _ = resp.Result.([]interface{})[7].(string)
 
 	return nil
 }
@@ -280,8 +281,8 @@ func (y *Yeelight) SetPower(power string, duration int) (Response, error) {
 	return y.request(cmd)
 }
 
-//Toogle method is used to toggle the smart LED.
-func (y *Yeelight) Toogle() (Response, error) {
+//Toggle method is used to toggle the smart LED.
+func (y *Yeelight) Toggle() (Response, error) {
 	cmd := Command{
 		ID:     7,
 		Method: "toggle",

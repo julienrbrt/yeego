@@ -6,14 +6,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func init() {
-	rootCmd.AddCommand(versionCmd)
-}
-
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Print the version number of Yeego",
+	Short: "Print the Yeego version number",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Yeego v0.1")
 	},
+}
+
+func init() {
+	rootCmd.AddCommand(versionCmd)
 }
