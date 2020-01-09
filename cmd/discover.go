@@ -19,11 +19,12 @@ var discoverCmd = &cobra.Command{
 			return err
 		}
 
-		if len(Lights) == 0 {
-			return errYeelightNotFound
-		}
+		fmt.Printf("%v Yeelight found on your network.\n", len(Lights))
 
-		fmt.Printf("%v Yeelight found on your network\n", len(Lights))
+		// no light found, do not write any config file
+		if len(Lights) == 0 {
+			return nil
+		}
 
 		lightsJSON, err := json.Marshal(Lights)
 		if err != nil {

@@ -17,7 +17,7 @@ var (
 
 	// error messages
 	errNotFoundLight    = errors.New("Light not found")
-	errYeelightNotFound = errors.New("No Yeelight found")
+	errYeelightNotFound = errors.New("No Yeelight found. Run `yeego discover` to find lights under your network")
 
 	// configuration
 	filename = ".yeego"
@@ -33,12 +33,6 @@ your Yeelight bulbs in your LAN directly from your terminal.`,
 yeego on bedroom`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Welcome in Yeego!")
-
-		if len(lights) == 0 {
-			return errYeelightNotFound
-		}
-
-		fmt.Println("Yeelight found! Use `yeego help` for a list of available commands.")
 		return nil
 	},
 }

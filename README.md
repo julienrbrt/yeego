@@ -1,6 +1,6 @@
 # Yeego
 
-[![GoDoc](https://godoc.org/github.com/julienrbrt/yeego?status.svg)](https://godoc.org/github.com/julienrbrt/yeego)
+[![GoDoc](https://godoc.org/github.com/julienrbrt/yeego?status.svg)](https://godoc.org/github.com/julienrbrt/yeego/lib/yeelight)
 
 Control your Yeelight bulbs over LAN with this simple go tool.
 
@@ -18,10 +18,32 @@ The "Developer Mode" need to be enabled to discover and operate the device.
 
 ### Yeego
 
+**Discover lights in your network**
+```
+yeego discover
+```
+
+**Turn on a light**
+```
+yeego on bedroom
+yeego on 192.168.2.1
+```
+
+**Togge a light**
+```
+yeego toggle plant
+yeego on 192.168.2.5
+```
+
+**Exhaustive list of supported commands**
+```
+yeego help
+```
 
 ### package yeelight
 
 ``` go
+
 
 ```
 
