@@ -157,7 +157,7 @@ func (y *Yeelight) request(cmd Command) (Response, error) {
 }
 
 //GetProp method is used to retrieve current property a light
-func (y *Yeelight) GetProp(values ...string) error {
+func (y *Yeelight) GetProp() error {
 	cmd := Command{
 		ID:     1,
 		Method: "get_prop",
