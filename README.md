@@ -42,10 +42,41 @@ yeego help
 
 ### package yeelight
 
+**Example usage of Yeelight Package**
+
 ``` go
+package main
 
+import (
+	"errors"
+	"fmt"
+	"os"
+	"time"
 
+	"github.com/julienrbrt/yeego/lib/yeelight"
+)
+
+func main() {
+	// discover yeelight on network
+	lights, err := yeelight.Discover(time.Duration(time.Second))
+	if err != nil {a
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	if len(lights) == 0 {
+		fmt.Println(errors.New("No Yeelight found."))
+		os.Exit(1)
+	}
+
+	for i := range lights {
+		// turn a a light
+		lights[i].Toggle()
+	}
+}
 ```
+
+The list of supported commands is present on [![GoDoc](https://godoc.org/github.com/julienrbrt/yeego?status.svg)](https://godoc.org/github.com/julienrbrt/yeego/lib/yeelight) 
 
 ## Feature and bugs
 

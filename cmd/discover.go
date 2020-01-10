@@ -14,19 +14,19 @@ var discoverCmd = &cobra.Command{
 	Use:   "discover",
 	Short: "Discover Yeelight bulbs on your network",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		Lights, err := yeelight.Discover(time.Duration(time.Second))
+		lights, err := yeelight.Discover(time.Duration(time.Second))
 		if err != nil {
 			return err
 		}
 
-		fmt.Printf("%v Yeelight found on your network.\n", len(Lights))
+		fmt.Printf("%v Yeelight found on your network.\n", len(lights))
 
 		// no light found, do not write any config file
-		if len(Lights) == 0 {
+		if len(lights) == 0 {
 			return nil
 		}
 
-		lightsJSON, err := json.Marshal(Lights)
+		lightsJSON, err := json.Marshal(lights)
 		if err != nil {
 			return err
 		}
