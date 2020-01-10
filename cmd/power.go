@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 
+	"github.com/julienrbrt/yeego/light/yeelight"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var turnOnCmd = &cobra.Command{
 		}
 
 		for i := range lights {
-			if lights[i].Name == strings.ToLower(args[0]) || strings.Split(lights[i].Location, ":")[0] == args[0] {
+			if yeelight.Matching(lights[i], args[0]) {
 				_, err := lights[i].On()
 				if err != nil {
 					return err
@@ -41,7 +41,7 @@ var turnOffCmd = &cobra.Command{
 		}
 
 		for i := range lights {
-			if lights[i].Name == strings.ToLower(args[0]) || strings.Split(lights[i].Location, ":")[0] == args[0] {
+			if yeelight.Matching(lights[i], args[0]) {
 				_, err := lights[i].Off()
 				if err != nil {
 					return err
@@ -66,7 +66,7 @@ var toggleCmd = &cobra.Command{
 		}
 
 		for i := range lights {
-			if lights[i].Name == strings.ToLower(args[0]) || strings.Split(lights[i].Location, ":")[0] == args[0] {
+			if yeelight.Matching(lights[i], args[0]) {
 				_, err := lights[i].Toggle()
 				if err != nil {
 					return err

@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/julienrbrt/yeego/lib/yeelight"
+	"github.com/julienrbrt/yeego/light/yeelight"
 	"github.com/spf13/cobra"
 )
 

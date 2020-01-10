@@ -1,6 +1,6 @@
 # Yeego
 
-[![GoDoc](https://godoc.org/github.com/julienrbrt/yeego?status.svg)](https://godoc.org/github.com/julienrbrt/yeego/lib/yeelight)
+[![GoDoc](https://godoc.org/github.com/julienrbrt/yeego?status.svg)](https://godoc.org/github.com/julienrbrt/yeego/light/yeelight)
 
 Control your Yeelight bulbs over LAN with this simple go tool.
 
@@ -53,7 +53,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/julienrbrt/yeego/lib/yeelight"
+	"github.com/julienrbrt/yeego/light/yeelight"
 )
 
 func main() {
@@ -76,7 +76,7 @@ func main() {
 }
 ```
 
-The list of supported commands is present on [![GoDoc](https://godoc.org/github.com/julienrbrt/yeego?status.svg)](https://godoc.org/github.com/julienrbrt/yeego/lib/yeelight) 
+The list of supported commands is present on [![GoDoc](https://godoc.org/github.com/julienrbrt/yeego?status.svg)](https://godoc.org/github.com/julienrbrt/yeego/light/yeelight) 
 
 ## Feature and bugs
 
