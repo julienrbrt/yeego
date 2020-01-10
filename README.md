@@ -32,7 +32,7 @@ yeego on 192.168.2.1
 **Togge a light**
 ```
 yeego toggle plant
-yeego on 192.168.2.5
+yeego toggle 192.168.2.5
 ```
 
 **Exhaustive list of supported commands**
