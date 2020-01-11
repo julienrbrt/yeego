@@ -192,6 +192,13 @@ func (y *Yeelight) SetCtAbx(value, duration int) (Response, error) {
 		duration = 0
 	}
 
+	// set value limits
+	if value < 1700 {
+		value = 1700
+	} else if value > 6500 {
+		value = 6500
+	}
+
 	cmd := Command{
 		ID:     2,
 		Method: "set_ct_abx",
@@ -201,8 +208,8 @@ func (y *Yeelight) SetCtAbx(value, duration int) (Response, error) {
 	return y.request(cmd)
 }
 
-//SetRGB method is used to change the color RGB of a smart LED.
-func (y *Yeelight) SetRGB(value, duration int) (Response, error) {
+//SetRGB method is used to change the color RGB of a smart LED (red, green, blue from 0-255).
+func (y *Yeelight) SetRGB(red, green, blue, duration int) (Response, error) {
 	var effect string
 
 	if duration > 0 {
@@ -212,10 +219,13 @@ func (y *Yeelight) SetRGB(value, duration int) (Response, error) {
 		duration = 0
 	}
 
+	// build rgb color
+	rgb := (red * 65536) + (green * 256) + blue
+
 	cmd := Command{
 		ID:     3,
 		Method: "set_rgb",
-		Params: []interface{}{value, effect, duration},
+		Params: []interface{}{rgb, effect, duration},
 	}
 
 	return y.request(cmd)
@@ -230,6 +240,18 @@ func (y *Yeelight) SetHSV(hue, sat, duration int) (Response, error) {
 	} else {
 		effect = "sudden"
 		duration = 0
+	}
+
+	if hue < 0 {
+		hue = 0
+	} else if hue > 359 {
+		hue = 359
+	}
+
+	if sat < 0 {
+		sat = 0
+	} else if sat > 100 {
+		sat = 100
 	}
 
 	cmd := Command{
