@@ -13,6 +13,9 @@ import (
 	"time"
 )
 
+// Port is the default Yeelight port
+const Port = "55443"
+
 var (
 	timeout  = time.Duration(2 * time.Second)
 	discover = "M-SEARCH * HTTP/1.1\r\nHOST:239.255.255.250:1982\r\nMAN:\"ssdp:discover\"\r\nST:wifi_bulb\r\n"
@@ -21,8 +24,6 @@ var (
 	errConnectLight = errors.New("Cannot connect to light")
 	errInvalidParam = errors.New("Invalid parameter value")
 )
-
-// TODO: if duration > 0 -> effect = smooth otherwise sudden
 
 //Yeelight are the light properties
 type Yeelight struct {

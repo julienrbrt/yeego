@@ -50,7 +50,7 @@ func argToYeelight(lights []yeelight.Yeelight, addr string) (yeelight.Yeelight, 
 	// parse the value as IP, permits to verify if the user enters an IP
 	ip := net.ParseIP(addr)
 	if ip != nil {
-		return yeelight.Yeelight{Location: addr}, nil
+		return yeelight.Yeelight{Location: addr + ":" + yeelight.Port}, nil
 	}
 
 	return yeelight.Yeelight{}, errYeelightNotFound
