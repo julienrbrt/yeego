@@ -1,11 +1,38 @@
 package cmd
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
 )
+
+var getPropsCmd = &cobra.Command{
+	Use:   "props [name/IP]",
+	Short: "Get properties of a given light",
+	Args:  cobra.MinimumNArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		light, err := argToYeelight(lights, args[0])
+		if err != nil {
+			return err
+		}
+
+		err = light.GetProp()
+		if err != nil {
+			return err
+		}
+
+		lightJSON, err := json.Marshal(light)
+		if err != nil {
+			return err
+		}
+
+		fmt.Printf("%s properties\n %s\n", args[0], lightJSON)
+		return nil
+
+	},
+}
 
 var setDefaultCmd = &cobra.Command{
 	Use:   "set-default [name/IP]",
@@ -58,6 +85,7 @@ var setNameCmd = &cobra.Command{
 }
 
 func init() {
+	rootCmd.AddCommand(getPropsCmd)
 	rootCmd.AddCommand(setDefaultCmd)
 	rootCmd.AddCommand(setNameCmd)
 }
