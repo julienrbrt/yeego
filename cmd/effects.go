@@ -9,9 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// timeout for duration
-var duration time.Duration
-
 var temperatureCmd = &cobra.Command{
 	Use:   "temp [name or IP] [color temperature in k]",
 	Short: "Change the color temperature of a given light",
@@ -29,7 +26,7 @@ The range is from 1700 to 6500 (k)`,
 			return errors.New("Color temperature is mandatory and integer")
 		}
 
-		_, err = light.SetCtAbx(color, int(duration.Milliseconds()))
+		_, err = light.SetCtAbx(color, int(timeout.Milliseconds()))
 		if err != nil {
 			return err
 		}
@@ -54,7 +51,7 @@ var colorCmd = &cobra.Command{
 			return errors.New("Color is mandatory and hexademical")
 		}
 
-		_, err = light.SetRGBhex(int(value), int(duration.Milliseconds()))
+		_, err = light.SetRGBhex(int(value), int(timeout.Milliseconds()))
 		if err != nil {
 			return err
 		}
@@ -65,8 +62,8 @@ var colorCmd = &cobra.Command{
 }
 
 func init() {
-	temperatureCmd.Flags().DurationVarP(&timeout, "timeout", "t", time.Second, "Timeout temperature change effect")
-	colorCmd.Flags().DurationVarP(&timeout, "timeout", "t", time.Second, "Timeout color change effect")
+	temperatureCmd.Flags().DurationVarP(&timeout, "timeout", "t", 30*time.Millisecond, "Timeout temperature change effect")
+	colorCmd.Flags().DurationVarP(&timeout, "timeout", "t", 30*time.Millisecond, "Timeout color change effect")
 
 	rootCmd.AddCommand(temperatureCmd)
 	rootCmd.AddCommand(colorCmd)

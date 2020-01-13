@@ -10,9 +10,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// timeout for discover
-var timeout time.Duration
-
 var discoverCmd = &cobra.Command{
 	Use:   "discover",
 	Short: "Discover Yeelight bulbs on your network",

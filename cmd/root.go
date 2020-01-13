@@ -8,6 +8,7 @@ import (
 	"net"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/julienrbrt/yeego/light/yeelight"
 	"github.com/spf13/cobra"
@@ -23,6 +24,9 @@ var (
 
 	// configuration
 	filename = ".yeego"
+
+	// timeout used for discover and effects
+	timeout time.Duration
 )
 
 // rootCmd represents the base command when called without any subcommands
