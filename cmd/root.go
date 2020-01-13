@@ -37,10 +37,6 @@ var rootCmd = &cobra.Command{
 your Yeelight bulbs in your LAN directly from your terminal.`,
 	Example: `yeego discover
 yeego on bedroom`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Welcome in Yeego!")
-		return nil
-	},
 }
 
 // argToYeelight searches a yeelight in the preloaded lights or build a new light if an IP is provided
