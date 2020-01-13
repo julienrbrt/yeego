@@ -98,7 +98,7 @@ by giving an action to perform and the property to change`,
 yeego adjust bedroom decrease bright
 yeego adjust bedroom increase ct
 yeego adjust bedroom decrease ct
-yeego adjust bedroom color cirle`,
+yeego adjust bedroom cirle color`,
 	Args: cobra.MinimumNArgs(3),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		light, err := argToYeelight(lights, args[0])
@@ -107,7 +107,7 @@ yeego adjust bedroom color cirle`,
 		}
 
 		if args[1] == "" || args[2] == "" {
-			return errors.New("An action and a property is mandatory")
+			return errors.New("Action and property are mandatory")
 		}
 
 		_, err = light.SetAdjust(args[1], args[2])
