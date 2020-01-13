@@ -5,7 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"os"
+	"strings"
 
 	"github.com/julienrbrt/yeego/light/yeelight"
 	"github.com/spf13/cobra"
@@ -17,7 +19,7 @@ var (
 
 	// error messages
 	errNotFoundLight    = errors.New("Light not found")
-	errYeelightNotFound = errors.New("No Yeelight found. Run `yeego discover` to find lights under your network")
+	errYeelightNotFound = errors.New("No Yeelight found. Run `yeego discover` to find lights on your network")
 
 	// configuration
 	filename = ".yeego"
@@ -35,6 +37,23 @@ yeego on bedroom`,
 		fmt.Println("Welcome in Yeego!")
 		return nil
 	},
+}
+
+// argToYeelight searches a yeelight in the preloaded lights or build a new light if an IP is provided
+func argToYeelight(lights []yeelight.Yeelight, addr string) (yeelight.Yeelight, error) {
+	for i := range lights {
+		if lights[i].Name == strings.ToLower(addr) {
+			return lights[i], nil
+		}
+	}
+
+	// parse the value as IP, permits to verify if the user enters an IP
+	ip := net.ParseIP(addr)
+	if ip != nil {
+		return yeelight.Yeelight{Location: addr}, nil
+	}
+
+	return yeelight.Yeelight{}, errYeelightNotFound
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

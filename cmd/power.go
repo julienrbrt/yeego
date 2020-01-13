@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/julienrbrt/yeego/light/yeelight"
 	"github.com/spf13/cobra"
 )
 
@@ -12,22 +11,18 @@ var turnOnCmd = &cobra.Command{
 	Short: "Turn on the given light",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(lights) == 0 {
-			return errYeelightNotFound
+		light, err := argToYeelight(lights, args[0])
+		if err != nil {
+			return err
 		}
 
-		for i := range lights {
-			if yeelight.Matching(lights[i], args[0]) {
-				_, err := lights[i].On()
-				if err != nil {
-					return err
-				}
-				fmt.Printf("%s turned on\n", args[0])
-				return nil
-			}
+		_, err = light.On()
+		if err != nil {
+			return err
 		}
 
-		return errNotFoundLight
+		fmt.Printf("%s turned on\n", args[0])
+		return nil
 	},
 }
 
@@ -36,22 +31,19 @@ var turnOffCmd = &cobra.Command{
 	Short: "Turn off the given light",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(lights) == 0 {
-			return errYeelightNotFound
+		light, err := argToYeelight(lights, args[0])
+		if err != nil {
+			return err
 		}
 
-		for i := range lights {
-			if yeelight.Matching(lights[i], args[0]) {
-				_, err := lights[i].Off()
-				if err != nil {
-					return err
-				}
-				fmt.Printf("%s turned off\n", args[0])
-				return nil
-			}
+		_, err = light.Off()
+		if err != nil {
+			return err
 		}
 
-		return errNotFoundLight
+		fmt.Printf("%s turned off\n", args[0])
+		return nil
+
 	},
 }
 
@@ -61,23 +53,19 @@ var toggleCmd = &cobra.Command{
 	Long:  `Toggle inverts the status off a light (on -> off and off -> on).`,
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(lights) == 0 {
-			return errYeelightNotFound
+		light, err := argToYeelight(lights, args[0])
+		if err != nil {
+			return err
 		}
 
-		for i := range lights {
-			if yeelight.Matching(lights[i], args[0]) {
-				_, err := lights[i].Toggle()
-				if err != nil {
-					return err
-				}
-
-				fmt.Printf("%s toggled\n", args[0])
-				return nil
-			}
+		_, err = light.Toggle()
+		if err != nil {
+			return err
 		}
 
-		return errNotFoundLight
+		fmt.Printf("%s toggled\n", args[0])
+		return nil
+
 	},
 }
 

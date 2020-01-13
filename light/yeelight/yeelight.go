@@ -127,10 +127,10 @@ func Discover(timeout time.Duration) ([]Yeelight, error) {
 // Handles the request
 func (y *Yeelight) request(cmd Command) (Response, error) {
 	conn, err := net.DialTimeout("tcp", y.Location, timeout)
-	defer conn.Close()
 	if err != nil {
 		return Response{}, errResolveTCP
 	}
+	defer conn.Close()
 
 	cmdJSON, err := json.Marshal(cmd)
 	if err != nil {
