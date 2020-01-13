@@ -231,6 +231,32 @@ func (y *Yeelight) SetRGB(red, green, blue, duration int) (Response, error) {
 	return y.request(cmd)
 }
 
+//SetRGBhex method is used to change the color RGB of a smart LED (using hexadecimal).
+func (y *Yeelight) SetRGBhex(value, duration int) (Response, error) {
+	var effect string
+
+	if duration > 0 {
+		effect = "smooth"
+	} else {
+		effect = "sudden"
+		duration = 0
+	}
+
+	if value > 16777215 {
+		value = 16777215
+	} else if value < 0 {
+		value = 0
+	}
+
+	cmd := Command{
+		ID:     3,
+		Method: "set_rgb",
+		Params: []interface{}{value, effect, duration},
+	}
+
+	return y.request(cmd)
+}
+
 //SetHSV method is used to change the color of a smart LED.
 func (y *Yeelight) SetHSV(hue, sat, duration int) (Response, error) {
 	var effect string

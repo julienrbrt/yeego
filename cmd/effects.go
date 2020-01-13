@@ -10,10 +10,10 @@ import (
 )
 
 // error messages
-var errDuration = errors.New("Duration must be in ms")
+var errDuration = errors.New("Duration must be in seconds")
 
 var temperatureCmd = &cobra.Command{
-	Use:   "temp [name or IP] [color temperature in k] [duration in ms]",
+	Use:   "temp [name or IP] [color temperature in k] [duration in sec]",
 	Short: "Change the color temperature of a given light",
 	Long: `Change the color temperature of a given light
 The range is from 1700 to 6500 (k)`,
@@ -25,13 +25,14 @@ The range is from 1700 to 6500 (k)`,
 
 		color, err := strconv.Atoi(args[1])
 		if err != nil {
-			return errors.New("Color temperature is mandatory and an integer")
+			return errors.New("Color temperature is mandatory and integer")
 		}
 
 		var duration int
 
 		if len(args) > 2 {
 			duration, err = strconv.Atoi(args[2])
+			duration = duration / 1000 // second to ms
 			if err != nil {
 				return errDuration
 			}
@@ -54,33 +55,24 @@ The range is from 1700 to 6500 (k)`,
 }
 
 var colorCmd = &cobra.Command{
-	Use:   "color [name or IP] [color in rgb] [duration in ms]",
+	Use:   "color [name or IP] [color in hex] [duration in sec]",
 	Short: "Change the color of a given light",
-	Args:  cobra.MinimumNArgs(4),
+	Args:  cobra.MinimumNArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(lights) == 0 {
 			return errYeelightNotFound
 		}
 
-		red, err := strconv.Atoi(args[1])
+		value, err := strconv.ParseInt(args[1], 16, 32)
 		if err != nil {
-			return errors.New("Red is mandatory and an integer")
-		}
-
-		green, err := strconv.Atoi(args[2])
-		if err != nil {
-			return errors.New("Green is mandatory and an integer")
-		}
-
-		blue, err := strconv.Atoi(args[3])
-		if err != nil {
-			return errors.New("Blue is mandatory and an integer")
+			return errors.New("Color is mandatory and hexademical")
 		}
 
 		var duration int
 
-		if len(args) > 4 {
-			duration, err = strconv.Atoi(args[4])
+		if len(args) > 2 {
+			duration, err = strconv.Atoi(args[2])
+			duration = duration / 1000 // second to ms
 			if err != nil {
 				return errDuration
 			}
@@ -88,7 +80,7 @@ var colorCmd = &cobra.Command{
 
 		for i := range lights {
 			if yeelight.Matching(lights[i], args[0]) {
-				_, err := lights[i].SetRGB(red, green, blue, duration)
+				_, err := lights[i].SetRGBhex(int(value), duration)
 				if err != nil {
 					return err
 				}
