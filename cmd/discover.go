@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"strings"
 	"time"
 
 	"github.com/julienrbrt/yeego/light/yeelight"
@@ -53,11 +54,12 @@ var listCmd = &cobra.Command{
 			return nil
 		}
 
+		fmt.Printf("%v Yeelight saved in configuration:\n", len(lights))
 		for i, light := range lights {
 			if light.Name == "" {
 				light.Name = "Unknown [no name]"
 			}
-			fmt.Printf("- %b: %s on %v\n", i, light.Name, light.Location)
+			fmt.Printf("- %d: %s on %v\n", i+1, light.Name, strings.Split(light.Location, ":")[0])
 		}
 
 		return nil
