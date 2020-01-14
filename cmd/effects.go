@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -120,6 +121,98 @@ yeego adjust bedroom cirle color`,
 	},
 }
 
+var colorFlowCmd = &cobra.Command{
+	Use:   "start-cf [name/IP] [count] [action] [expression]",
+	Short: "Start running a color flow (cf)",
+	Long: `Start running a color flow (cf)
+"count" is the total number of visible state changing before color flow
+	stopped. 0 means infinite loop on the state changing.
+"action" is the action taken after the flow is stopped.
+	"recover-state" means smart LED recover to the state before the color flow started.
+	"keep-state" means smart LED stay at the state when the flow is stopped.
+	"turn-off" means turn off the smart LED after the flow is stopped.
+"flow_expression" is the expression of the state changing series.
+	Each visible state changing is defined to be a flow tuple that contains 4
+	elements: [duration, mode, value, brightness]. A flow expression is a series of flow tuples.
+	So for above request example, it means: change CT to 2700K & maximum brightness
+	gradually in 1000ms, then change color to red & 10% \brightness gradually in 500ms, then
+	stay at this state for 5 seconds, then change CT to 5000K & minimum brightness gradually in
+	500ms. After 4 changes reached, stopped the flow and power off the smart LED`,
+	Example: `yeego start-cf bedroom 4 2 1000,2,2700,100
+yeego start-cf bedroom 4 2 1000,2,2700,100,500,1,255,10,5000,7,0,0,500,2,5000,1`,
+	Args: cobra.MinimumNArgs(4),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		light, err := argToYeelight(lights, args[0])
+		if err != nil {
+			return err
+		}
+
+		count, err := strconv.Atoi(args[1])
+		if err != nil {
+			return errors.New("The number of time to repeat the flow is mandatory")
+		}
+
+		var action int
+		switch args[2] {
+		case "recover-state":
+			action = 0
+		case "keep-state":
+			action = 1
+		case "turn-off":
+			action = 2
+		default:
+			return errors.New("Action invalid. Please check help")
+		}
+
+		exp := strings.Split(args[3], ",")
+		if len(exp) < 4 {
+			return errors.New("Action invalid. Please check help")
+		}
+
+		for i := range exp {
+			tmp, err := strconv.Atoi(exp[i])
+			if err != nil {
+				return errors.New("All the numbers of the flow should be integer: [duration, mode, value, brightness]")
+			}
+
+			// convert the duration to ms
+			if i == 1 {
+				exp[i] = string(tmp * 1000)
+			}
+		}
+
+		_, err = light.StartCf(count, action, strings.Join(exp, ","))
+		if err != nil {
+			return err
+		}
+
+		fmt.Printf("%s color flow started\n", args[0])
+		return nil
+
+	},
+}
+
+var stopColorFlowCmd = &cobra.Command{
+	Use:   "stop-cf [name/IP]",
+	Short: "Stop a running color flow (cf)",
+	Args:  cobra.MinimumNArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		light, err := argToYeelight(lights, args[0])
+		if err != nil {
+			return err
+		}
+
+		_, err = light.StopCf()
+		if err != nil {
+			return err
+		}
+
+		fmt.Printf("%s color flow stopped\n", args[0])
+		return nil
+
+	},
+}
+
 func init() {
 	temperatureCmd.Flags().DurationVarP(&timeout, "timeout", "t", 30*time.Millisecond, "Timeout temperature change effect")
 	colorCmd.Flags().DurationVarP(&timeout, "timeout", "t", 30*time.Millisecond, "Timeout color change effect")
@@ -129,4 +222,6 @@ func init() {
 	rootCmd.AddCommand(colorCmd)
 	rootCmd.AddCommand(brightnessCmd)
 	rootCmd.AddCommand(adjustCmd)
+	rootCmd.AddCommand(colorFlowCmd)
+	rootCmd.AddCommand(stopColorFlowCmd)
 }
