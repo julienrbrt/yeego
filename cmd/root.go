@@ -43,7 +43,7 @@ yeego on bedroom`,
 			return nil
 		}
 
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			// if error do not write anything
 			return nil
@@ -57,7 +57,7 @@ yeego on bedroom`,
 
 		for i := range lights {
 			if lights[i].Location == light.Location {
-				lights[i] = light
+				lights[i] = *light
 			}
 		}
 
@@ -67,20 +67,20 @@ yeego on bedroom`,
 }
 
 // argToYeelight searches a yeelight in the preloaded lights or build a new light if an IP is provided
-func argToYeelight(lights []yeelight.Yeelight, addr string) (yeelight.Yeelight, error) {
+func argToYeelight(addr string) (*yeelight.Yeelight, error) {
 	for _, light := range lights {
 		if light.Name == strings.ToLower(addr) || strings.Split(light.Location, ":")[0] == addr {
-			return light, nil
+			return &light, nil
 		}
 	}
 
 	// parse the value as IP, permits to verify if the user enters an IP
 	ip := net.ParseIP(addr)
 	if ip != nil {
-		return yeelight.Yeelight{Location: addr + ":" + yeelight.Port}, nil
+		return &yeelight.Yeelight{Location: addr + ":" + yeelight.Port}, nil
 	}
 
-	return yeelight.Yeelight{}, errYeelightNotFound
+	return &yeelight.Yeelight{}, errYeelightNotFound
 }
 
 // Write the yeego config file

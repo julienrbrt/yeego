@@ -13,7 +13,7 @@ var getPropsCmd = &cobra.Command{
 	Short: "Get properties of a given light",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}
@@ -28,7 +28,7 @@ var getPropsCmd = &cobra.Command{
 			return err
 		}
 
-		fmt.Printf("%s properties\n %s\n", args[0], lightJSON)
+		fmt.Printf("%s properties:\n%s\n", args[0], lightJSON)
 		return nil
 
 	},
@@ -40,7 +40,7 @@ var setDefaultCmd = &cobra.Command{
 	Long: `Save state of given light as default.
 If the yeelight is turned off from power, the saved status is used when powered on`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}
@@ -62,7 +62,7 @@ var setNameCmd = &cobra.Command{
 	Example: "yeego set-name bedroom",
 	Args:    cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}

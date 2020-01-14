@@ -11,7 +11,7 @@ var turnOnCmd = &cobra.Command{
 	Short: "Turn on the given light",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}
@@ -31,7 +31,7 @@ var turnOffCmd = &cobra.Command{
 	Short: "Turn off the given light",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}
@@ -53,7 +53,7 @@ var toggleCmd = &cobra.Command{
 	Long:  `Toggle inverts the status off a light (on -> off and off -> on).`,
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}

@@ -18,7 +18,7 @@ The range is from 1700 to 6500 (k)`,
 	Example: "yeego set-temp bedroom 3500",
 	Args:    cobra.MinimumNArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}
@@ -44,7 +44,7 @@ var colorCmd = &cobra.Command{
 	Example: "yeego set-color bedroom ffffff",
 	Args:    cobra.MinimumNArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}
@@ -70,7 +70,7 @@ var brightnessCmd = &cobra.Command{
 	Example: "yeego set-bright bedroom 75",
 	Args:    cobra.MinimumNArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}
@@ -102,7 +102,7 @@ yeego adjust bedroom decrease ct
 yeego adjust bedroom cirle color`,
 	Args: cobra.MinimumNArgs(3),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}
@@ -142,7 +142,7 @@ var colorFlowCmd = &cobra.Command{
 yeego start-cf bedroom 4 recover-state 100,2,2700,100,50,1,255,10,500,7,0,0,500,2,5000,1`,
 	Args: cobra.MinimumNArgs(4),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}
@@ -197,7 +197,7 @@ var stopColorFlowCmd = &cobra.Command{
 	Short: "Stop a running color flow (cf)",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		light, err := argToYeelight(lights, args[0])
+		light, err := argToYeelight(args[0])
 		if err != nil {
 			return err
 		}
