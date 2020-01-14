@@ -138,8 +138,8 @@ var colorFlowCmd = &cobra.Command{
 	gradually in 1000ms, then change color to red & 10% \brightness gradually in 500ms, then
 	stay at this state for 5 seconds, then change CT to 5000K & minimum brightness gradually in
 	500ms. After 4 changes reached, stopped the flow and power off the smart LED`,
-	Example: `yeego start-cf bedroom 4 2 1000,2,2700,100
-yeego start-cf bedroom 4 2 1000,2,2700,100,500,1,255,10,5000,7,0,0,500,2,5000,1`,
+	Example: `yeego start-cf bedroom 4 turn-off 1000,2,2700,100
+yeego start-cf bedroom 4 recover-state 100,2,2700,100,50,1,255,10,500,7,0,0,500,2,5000,1`,
 	Args: cobra.MinimumNArgs(4),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		light, err := argToYeelight(lights, args[0])
@@ -175,9 +175,9 @@ yeego start-cf bedroom 4 2 1000,2,2700,100,500,1,255,10,5000,7,0,0,500,2,5000,1`
 				return errors.New("All the numbers of the flow should be integer: [duration, mode, value, brightness]")
 			}
 
-			// convert the duration to ms
-			if i == 1 {
-				exp[i] = string(tmp * 1000)
+			// convert seconds to ms
+			if (i % 4) == 0 {
+				exp[i] = strconv.FormatInt(int64(tmp*1000), 10)
 			}
 		}
 
