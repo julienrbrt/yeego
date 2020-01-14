@@ -37,12 +37,39 @@ var rootCmd = &cobra.Command{
 your Yeelight bulbs in your LAN directly from your terminal.`,
 	Example: `yeego discover
 yeego on bedroom`,
+	PersistentPostRunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) == 0 {
+			// if no light do not write anything
+			return nil
+		}
+
+		light, err := argToYeelight(lights, args[0])
+		if err != nil {
+			// if error do not write anything
+			return nil
+		}
+
+		// Get light properties
+		err = light.GetProp()
+		if err != nil {
+			return nil
+		}
+
+		for i := range lights {
+			if lights[i].Location == light.Location {
+				lights[i] = light
+			}
+		}
+
+		err = writeConfig()
+		return err
+	},
 }
 
 // argToYeelight searches a yeelight in the preloaded lights or build a new light if an IP is provided
 func argToYeelight(lights []yeelight.Yeelight, addr string) (yeelight.Yeelight, error) {
 	for _, light := range lights {
-		if light.Name == strings.ToLower(addr) {
+		if light.Name == strings.ToLower(addr) || strings.Split(light.Location, ":")[0] == addr {
 			return light, nil
 		}
 	}
@@ -54,6 +81,27 @@ func argToYeelight(lights []yeelight.Yeelight, addr string) (yeelight.Yeelight, 
 	}
 
 	return yeelight.Yeelight{}, errYeelightNotFound
+}
+
+// Write the yeego config file
+func writeConfig() error {
+	// no light found, do not write any config file
+	if len(lights) == 0 {
+		return nil
+	}
+
+	lightsJSON, err := json.Marshal(lights)
+	if err != nil {
+		return err
+	}
+
+	// write config file
+	err = ioutil.WriteFile(filename, lightsJSON, 0644)
+	if err != nil {
+		panic(err)
+	}
+
+	return nil
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

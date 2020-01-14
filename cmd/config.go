@@ -76,8 +76,6 @@ var setNameCmd = &cobra.Command{
 			return err
 		}
 
-		// TODO write name in config
-
 		fmt.Printf("%s name saved\n", args[0])
 		return nil
 

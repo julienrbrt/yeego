@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"strings"
 	"time"
 
@@ -22,23 +20,9 @@ var discoverCmd = &cobra.Command{
 
 		fmt.Printf("%v Yeelight found on your network.\n", len(lights))
 
-		// no light found, do not write any config file
-		if len(lights) == 0 {
-			return nil
-		}
-
-		lightsJSON, err := json.Marshal(lights)
-		if err != nil {
-			return err
-		}
-
-		// write config file
-		err = ioutil.WriteFile(filename, lightsJSON, 0644)
-		if err != nil {
-			panic(err)
-		}
-
-		return nil
+		//write configuration file
+		err = writeConfig()
+		return err
 	},
 }
 
