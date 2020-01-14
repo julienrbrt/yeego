@@ -41,9 +41,9 @@ yeego on bedroom`,
 
 // argToYeelight searches a yeelight in the preloaded lights or build a new light if an IP is provided
 func argToYeelight(lights []yeelight.Yeelight, addr string) (yeelight.Yeelight, error) {
-	for i := range lights {
-		if lights[i].Name == strings.ToLower(addr) {
-			return lights[i], nil
+	for _, light := range lights {
+		if light.Name == strings.ToLower(addr) {
+			return light, nil
 		}
 	}
 

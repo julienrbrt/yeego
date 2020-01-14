@@ -41,7 +41,31 @@ var discoverCmd = &cobra.Command{
 	},
 }
 
+var listCmd = &cobra.Command{
+	Use:     "list",
+	Short:   "List the saved Yeelight",
+	Long:    "List the saved Yeelight from the .yeego configuration file",
+	Example: "yeego list",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		// no light found
+		if len(lights) == 0 {
+			fmt.Println("No Yeelight saved in configuration")
+			return nil
+		}
+
+		for i, light := range lights {
+			if light.Name == "" {
+				light.Name = "Unknown [no name]"
+			}
+			fmt.Printf("- %b: %s on %v\n", i, light.Name, light.Location)
+		}
+
+		return nil
+	},
+}
+
 func init() {
 	discoverCmd.Flags().DurationVarP(&timeout, "timeout", "t", time.Second, "Timeout for discover")
 	rootCmd.AddCommand(discoverCmd)
+	rootCmd.AddCommand(listCmd)
 }
