@@ -10,7 +10,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the Yeego version number",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Yeego v0.1")
+		fmt.Println("Yeego v0.1.2")
 	},
 }
 

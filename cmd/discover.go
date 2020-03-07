@@ -21,7 +21,7 @@ var discoverCmd = &cobra.Command{
 		fmt.Printf("%v Yeelight found on your network.\n", len(lights))
 
 		//write configuration file
-		err = writeConfig()
+		err = writeConfig(&lights)
 		return err
 	},
 }

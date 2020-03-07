@@ -64,7 +64,7 @@ yeego on bedroom`,
 			}
 		}
 
-		err = writeConfig()
+		err = writeConfig(&lights)
 		return err
 	},
 }
@@ -87,9 +87,9 @@ func argToYeelight(addr string) (*yeelight.Yeelight, error) {
 }
 
 // Write the yeego config file
-func writeConfig() error {
+func writeConfig(lights *[]yeelight.Yeelight) error {
 	// no light found, do not write any config file
-	if len(lights) == 0 {
+	if len(*lights) == 0 {
 		return nil
 	}
 
