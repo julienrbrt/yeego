@@ -5,12 +5,15 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net"
 	"os"
+	"path"
 	"strings"
 	"time"
 
 	"github.com/julienrbrt/yeego/light/yeelight"
+	"github.com/kardianos/osext"
 	"github.com/spf13/cobra"
 )
 
@@ -22,8 +25,8 @@ var (
 	errNotFoundLight    = errors.New("Light not found")
 	errYeelightNotFound = errors.New("No Yeelight found. Run `yeego discover` to find lights on your network")
 
-	// configuration
-	filename = ".yeego"
+	// configuration file name
+	confName = ".yeego"
 
 	// timeout used for discover and effects
 	timeout time.Duration
@@ -95,10 +98,16 @@ func writeConfig() error {
 		return err
 	}
 
-	// write config file
-	err = ioutil.WriteFile(filename, lightsJSON, 0644)
+	//get program path
+	folderPath, err := osext.ExecutableFolder()
 	if err != nil {
-		panic(err)
+		return err
+	}
+
+	// write config file
+	err = ioutil.WriteFile(path.Join(folderPath, confName), lightsJSON, 0644)
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -114,7 +123,13 @@ func Execute() {
 }
 
 func init() {
+	//get program path
+	folderPath, err := osext.ExecutableFolder()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	// read configuration file - no error check
-	file, _ := ioutil.ReadFile(filename)
+	file, _ := ioutil.ReadFile(path.Join(folderPath, confName))
 	json.Unmarshal(file, &lights)
 }
